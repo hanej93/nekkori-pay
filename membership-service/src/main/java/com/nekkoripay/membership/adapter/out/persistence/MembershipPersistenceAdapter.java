@@ -1,10 +1,10 @@
 package com.nekkoripay.membership.adapter.out.persistence;
 
+import com.nekkoripay.common.PersistenceAdapter;
 import com.nekkoripay.membership.application.port.out.FindMembershipPort;
 import com.nekkoripay.membership.application.port.out.RegisterMembershipPort;
 import com.nekkoripay.membership.domain.Membership;
 
-import common.PersistenceAdapter;
 import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter

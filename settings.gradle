@@ -1,1 +1,5 @@
 rootProject.name = 'nekkori-pay'
+
+include 'membership-service'
+include 'common'
+

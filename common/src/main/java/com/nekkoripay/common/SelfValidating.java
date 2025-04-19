@@ -1,4 +1,4 @@
-package common;
+package com.nekkoripay.common;
 
 import java.util.Set;
 

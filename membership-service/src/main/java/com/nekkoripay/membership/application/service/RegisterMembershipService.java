@@ -1,5 +1,6 @@
 package com.nekkoripay.membership.application.service;
 
+import com.nekkoripay.common.UseCase;
 import com.nekkoripay.membership.adapter.out.persistence.MembershipJpaEntity;
 import com.nekkoripay.membership.adapter.out.persistence.MembershipMapper;
 import com.nekkoripay.membership.application.port.in.RegisterMembershipCommand;
@@ -7,7 +8,6 @@ import com.nekkoripay.membership.application.port.in.RegisterMembershipUseCase;
 import com.nekkoripay.membership.application.port.out.RegisterMembershipPort;
 import com.nekkoripay.membership.domain.Membership;
 
-import common.UseCase;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
