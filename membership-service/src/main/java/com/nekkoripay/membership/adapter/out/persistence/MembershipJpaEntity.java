@@ -48,4 +48,8 @@ public class MembershipJpaEntity {
 			", isCorp=" + isCorp +
 			'}';
 	}
+
+	public MembershipJpaEntity clone() {
+		return new MembershipJpaEntity(this.membershipId, this.name, this.address, this.email, this.isValid, this.isCorp);
+	}
 }

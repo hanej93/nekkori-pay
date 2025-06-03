@@ -1,4 +1,4 @@
-group = 'com.nekkori-pay'
+group = 'com.nekkoripay'
 version = '0.0.1-SNAPSHOT'
 
 dependencies {
