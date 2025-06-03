@@ -1,5 +1,6 @@
 package com.nekkoripay.membership.adapter.in.web;
 
+import com.nekkoripay.common.WebAdapter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,7 +10,6 @@ import com.nekkoripay.membership.application.port.in.FindMembershipCommand;
 import com.nekkoripay.membership.application.port.in.FindMembershipUseCase;
 import com.nekkoripay.membership.domain.Membership;
 
-import common.WebAdapter;
 import lombok.RequiredArgsConstructor;
 
 @WebAdapter

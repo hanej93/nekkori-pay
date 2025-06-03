@@ -30,6 +30,6 @@ public class MembershipPersistenceAdapter implements RegisterMembershipPort, Fin
 
 	@Override
 	public MembershipJpaEntity findMembership(Membership.MembershipId membershipId) {
-		return membershipRepository.getById(Long.parseLong(membershipId.getMembershipId()));
+		return membershipRepository.getReferenceById(Long.parseLong(membershipId.getMembershipId()));
 	}
 }

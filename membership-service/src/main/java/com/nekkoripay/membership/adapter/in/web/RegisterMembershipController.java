@@ -1,5 +1,6 @@
 package com.nekkoripay.membership.adapter.in.web;
 
+import com.nekkoripay.common.WebAdapter;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -8,7 +9,6 @@ import com.nekkoripay.membership.application.port.in.RegisterMembershipCommand;
 import com.nekkoripay.membership.application.port.in.RegisterMembershipUseCase;
 import com.nekkoripay.membership.domain.Membership;
 
-import common.WebAdapter;
 import lombok.RequiredArgsConstructor;
 
 @WebAdapter

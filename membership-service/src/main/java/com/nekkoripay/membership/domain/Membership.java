@@ -8,18 +8,12 @@ import lombok.Value;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Membership {
 
-	@Getter
-	private final String membershipId;
-	@Getter
-	private final String name;
-	@Getter
-	private final String email;
-	@Getter
-	private final String address;
-	@Getter
-	private final boolean isValid;
-	@Getter
-	private final boolean isCorp;
+	@Getter private final String membershipId;
+	@Getter private final String name;
+	@Getter private final String email;
+	@Getter private final String address;
+	@Getter private final boolean isValid;
+	@Getter private final boolean isCorp;
 
 	// Membership
 	// 오염이 되면 안되는 클래스. 고객 정보. 핵심 도메인
