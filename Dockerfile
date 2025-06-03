@@ -1,4 +1,5 @@
-FROM openjdk:23-slim-bookworm
+#FROM openjdk:23-slim-bookworm
+FROM eclipse-temurin:23-jdk-alpine
 EXPOSE 8080
 ARG JAR_FILE
 COPY ${JAR_FILE} app.jar
