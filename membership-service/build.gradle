@@ -1,5 +1,9 @@
-group = 'com.nekkoripay'
-version = '0.0.1-SNAPSHOT'
+plugins{
+	id 'com.palantir.docker' version '0.36.0'
+}
+
+group = 'com.nekkoripay.membership'
+version = '1.0.0'
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -9,4 +13,12 @@ dependencies {
 
 	runtimeOnly 'com.h2database:h2'
 	implementation project(':common')
+}
+
+docker {
+	println(tasks.bootJar.outputs.files)
+	name rootProject.name+'-'+project.name + ":" + version
+	dockerfile file('./Dockerfile')
+	files tasks.bootJar.outputs.files
+	buildArgs(['JAR_FILE': tasks.bootJar.outputs.files.singleFile.name])
 }

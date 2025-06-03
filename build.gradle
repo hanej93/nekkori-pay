@@ -11,7 +11,7 @@ java {
 }
 
 subprojects {
-    group = 'com.nekkoripay.membership'
+    group = 'com.nekkoripay'
     version = '0.0.1-SNAPSHOT'
 
     apply plugin: 'java'
