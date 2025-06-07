@@ -4,10 +4,11 @@ import com.nekkoripay.common.CountDownLatchManager;
 import com.nekkoripay.common.RechargingMoneyTask;
 import com.nekkoripay.common.SubTask;
 import com.nekkoripay.common.UseCase;
+import com.nekkoripay.money.adapter.axon.command.IncreaseMemberMoneyCommand;
+import com.nekkoripay.money.adapter.axon.command.MemberMoneyCreatedCommand;
 import com.nekkoripay.money.adapter.out.persistence.MemberMoneyJpaEntity;
 import com.nekkoripay.money.adapter.out.persistence.MoneyChangingRequestMapper;
-import com.nekkoripay.money.application.port.in.IncreaseMoneyRequestCommand;
-import com.nekkoripay.money.application.port.in.IncreaseMoneyRequestUseCase;
+import com.nekkoripay.money.application.port.in.*;
 import com.nekkoripay.money.application.port.out.GetMembershipPort;
 import com.nekkoripay.money.application.port.out.IncreaseMoneyPort;
 import com.nekkoripay.money.application.port.out.SendRechargingMoneyTaskPort;
@@ -15,6 +16,7 @@ import com.nekkoripay.money.domain.MemberMoney;
 import com.nekkoripay.money.domain.MoneyChangingRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.axonframework.commandhandling.gateway.CommandGateway;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +25,18 @@ import java.util.UUID;
 @UseCase
 @RequiredArgsConstructor
 @Transactional
-public class IncreaseMoneyRequestService implements IncreaseMoneyRequestUseCase {
+public class IncreaseMoneyRequestService implements IncreaseMoneyRequestUseCase, CreateMemberMoneyUseCase {
 
     private final GetMembershipPort membershipPort;
     private final SendRechargingMoneyTaskPort sendRechargingMoneyTaskPort;
-    private final CountDownLatchManager countDownLatchManager;
     private final IncreaseMoneyPort increaseMoneyPort;
+    private final CreateMemberMoneyPort createMemberMoneyPort;
+    private final GetMemberMoneyPort getMemberMoneyPort;
+
     private final MoneyChangingRequestMapper mapper;
+
+    private final CountDownLatchManager countDownLatchManager;
+    private final CommandGateway commandGateway;
 
     @Override
     public MoneyChangingRequest increaseMoneyRequest(IncreaseMoneyRequestCommand command) {
@@ -144,5 +151,73 @@ public class IncreaseMoneyRequestService implements IncreaseMoneyRequestUseCase 
         }
         // 5. Consume ok, Logic
         return null;
+    }
+
+    @Override
+    public void createMemberMoney(CreateMemberMoneyCommand command) {
+        MemberMoneyCreatedCommand axonCommand = new MemberMoneyCreatedCommand(command.getMembershipId());
+        commandGateway.send(axonCommand).whenComplete((result, throwable) -> {
+            if (throwable != null) {
+                System.out.println("throwable = " + throwable);
+                throw new RuntimeException(throwable);
+            } else {
+                System.out.println("result = " + result);
+                createMemberMoneyPort.createMemberMoney(
+                        new MemberMoney.MembershipId(command.getMembershipId()),
+                        new MemberMoney.MoneyAggregateIdentifier(result.toString())
+                );
+            }
+        });
+    }
+
+//    @Override
+//    public void increaseMoneyRequestByEvent(IncreaseMoneyRequestCommand command) {
+//        MemberMoneyJpaEntity memberMoneyJpaEntity = getMemberMoneyPort.getMemberMoney(new MemberMoney.MembershipId(command.getTargetMembershipId()));
+//        String memberMoneyAggregateIdentifier = memberMoneyJpaEntity.getAggregateIdentifier();
+//
+//        // Saga 의 시작을 나타내는 커맨드!
+//        // RechargingMoneyRequestCreateCommand
+//        commandGateway.send(new RechargingMoneyRequestCreateCommand(
+//                memberMoneyAggregateIdentifier,
+//                UUID.randomUUID().toString(),
+//                command.getTargetMembershipId(),
+//                command.getAmount())
+//        ).whenComplete((result, throwable) -> {
+//                    if (throwable != null) {
+//                        throwable.printStackTrace();
+//                        throw new RuntimeException(throwable);
+//                    } else {
+//                        System.out.println("result = " + result); // aggregateIdentifier
+//                    }
+//                }
+//        );
+//    }
+
+    @Override
+    public void increaseMoneyRequestByEvent(IncreaseMoneyRequestCommand command) {
+        MemberMoneyJpaEntity memberMoneyJpaEntity = getMemberMoneyPort.getMemberMoney(
+                new MemberMoney.MembershipId(command.getTargetMembershipId())
+        );
+
+        String aggregateIdentifier = memberMoneyJpaEntity.getAggregateIdentifier();
+        // command
+        commandGateway.send(IncreaseMemberMoneyCommand.builder()
+                        .aggregateIdentifier(aggregateIdentifier)
+                        .membershipId(command.getTargetMembershipId())
+                        .amount(command.getAmount()).build())
+                .whenComplete(
+                        (result, throwable) -> {
+                            if (throwable != null) {
+                                throwable.printStackTrace();
+                                throw new RuntimeException(throwable);
+                            } else {
+                                // Increase money -> money incr
+                                System.out.println("increaseMoney result = " + result);
+                                increaseMoneyPort.increaseMoney(
+                                        new MemberMoney.MembershipId(command.getTargetMembershipId())
+                                        , command.getAmount());
+                            }
+                        }
+                );
     }
 }

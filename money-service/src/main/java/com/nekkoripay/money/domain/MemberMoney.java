@@ -7,6 +7,7 @@ import lombok.Value;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemberMoney {
+
     @Getter private final String memberMoneyId;
 
     @Getter private final String membershipId;
@@ -50,5 +51,13 @@ public class MemberMoney {
             this.balance = value;
         }
         int balance ;
+    }
+
+    @Value
+    public static class MoneyAggregateIdentifier {
+        public MoneyAggregateIdentifier(String aggregateIdentifier) {
+            this.aggregateIdentifier = aggregateIdentifier;
+        }
+        String aggregateIdentifier ;
     }
 }
