@@ -1,4 +1,4 @@
-package com.nekkoripay.banking.adapter.service;
+package com.nekkoripay.banking.adapter.out.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nekkoripay.banking.application.port.out.GetMembershipPort;
@@ -31,7 +31,7 @@ public class MembershipServiceAdapter implements GetMembershipPort {
             ObjectMapper mapper = new ObjectMapper();
             Membership membership = mapper.readValue(jsonResponse, Membership.class);
 
-            if (membership.isValid()) {
+            if (membership.isValid()){
                 return new MembershipStatus(membership.getMembershipId(), true);
             } else {
                 return new MembershipStatus(membership.getMembershipId(), false);

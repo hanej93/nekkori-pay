@@ -1,4 +1,4 @@
-package com.nekkoripay.banking.adapter.service;
+package com.nekkoripay.banking.adapter.out.service;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
