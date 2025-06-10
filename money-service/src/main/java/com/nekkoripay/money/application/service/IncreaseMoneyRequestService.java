@@ -7,8 +7,10 @@ import com.nekkoripay.common.UseCase;
 import com.nekkoripay.money.adapter.axon.command.MemberMoneyCreatedCommand;
 import com.nekkoripay.money.adapter.axon.command.RechargingMoneyRequestCreateCommand;
 import com.nekkoripay.money.adapter.out.persistence.MemberMoneyJpaEntity;
+import com.nekkoripay.money.adapter.out.persistence.MemberMoneyMapper;
 import com.nekkoripay.money.adapter.out.persistence.MoneyChangingRequestMapper;
 import com.nekkoripay.money.application.port.in.*;
+import com.nekkoripay.money.application.port.out.GetMemberMoneyListPort;
 import com.nekkoripay.money.application.port.out.GetMembershipPort;
 import com.nekkoripay.money.application.port.out.IncreaseMoneyPort;
 import com.nekkoripay.money.application.port.out.SendRechargingMoneyTaskPort;
@@ -32,8 +34,10 @@ public class IncreaseMoneyRequestService implements IncreaseMoneyRequestUseCase,
     private final IncreaseMoneyPort increaseMoneyPort;
     private final CreateMemberMoneyPort createMemberMoneyPort;
     private final GetMemberMoneyPort getMemberMoneyPort;
+    private final GetMemberMoneyListPort getMemberMoneyListPort;
 
     private final MoneyChangingRequestMapper mapper;
+    private final MemberMoneyMapper memberMoneyMapper;
 
     private final CountDownLatchManager countDownLatchManager;
     private final CommandGateway commandGateway;
@@ -220,4 +224,17 @@ public class IncreaseMoneyRequestService implements IncreaseMoneyRequestUseCase,
 //                        }
 //                );
 //    }
+
+    @Override
+    public List<MemberMoney> findMemberMoneyListByMembershipIds(FindMemberMoneyListByMembershipIdsCommand command) {
+        // 여러개의 membership Ids 를 기준으로, memberMoney 정보를 가져와야 해요.
+        List<MemberMoneyJpaEntity> memberMoneyJpaEntityList = getMemberMoneyListPort.getMemberMoneyPort(command.getMembershipIds());
+        List<MemberMoney> memberMoneyList = new ArrayList<>();
+
+        for (MemberMoneyJpaEntity memberMoneyJpaEntity : memberMoneyJpaEntityList) {
+            memberMoneyList.add(memberMoneyMapper.mapToDomainEntity(memberMoneyJpaEntity));
+        }
+
+        return memberMoneyList;
+    }
 }

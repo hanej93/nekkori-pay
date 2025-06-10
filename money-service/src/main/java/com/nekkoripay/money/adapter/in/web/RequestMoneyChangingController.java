@@ -1,15 +1,15 @@
 package com.nekkoripay.money.adapter.in.web;
 
 import com.nekkoripay.common.WebAdapter;
-import com.nekkoripay.money.application.port.in.CreateMemberMoneyCommand;
-import com.nekkoripay.money.application.port.in.CreateMemberMoneyUseCase;
-import com.nekkoripay.money.application.port.in.IncreaseMoneyRequestCommand;
-import com.nekkoripay.money.application.port.in.IncreaseMoneyRequestUseCase;
+import com.nekkoripay.money.application.port.in.*;
+import com.nekkoripay.money.domain.MemberMoney;
 import com.nekkoripay.money.domain.MoneyChangingRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 
 @WebAdapter
@@ -85,5 +85,14 @@ public class RequestMoneyChangingController {
                 .build();
 
         increaseMoneyRequestUseCase.increaseMoneyRequestByEvent(command);
+    }
+
+    @PostMapping(path = "/money/member-money")
+    List<MemberMoney> findMemberMoneyListByMembershipIds(@RequestBody FindMemberMoneyListByMembershipIdsRequest request) {
+        FindMemberMoneyListByMembershipIdsCommand command = FindMemberMoneyListByMembershipIdsCommand.builder()
+                .membershipIds(request.getMembershipIds())
+                .build();
+
+        return increaseMoneyRequestUseCase.findMemberMoneyListByMembershipIds(command);
     }
 }
