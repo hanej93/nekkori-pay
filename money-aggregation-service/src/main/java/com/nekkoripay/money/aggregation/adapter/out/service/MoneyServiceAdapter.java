@@ -23,6 +23,7 @@ public class MoneyServiceAdapter implements GetMoneySumPort {
         this.moneyServiceHttpClient = commonHttpClient;
         this.moneyServiceEndpoint = moneyServiceEndpoint;
     }
+
     @Override
     public List<MemberMoney> getMoneySumByMembershipIds(List<String> membershipIds) {
         String url = String.join("/", moneyServiceEndpoint, "money/member-money");
@@ -31,8 +32,7 @@ public class MoneyServiceAdapter implements GetMoneySumPort {
         try {
             FindMemberMoneyRequest request = new FindMemberMoneyRequest(membershipIds);
             String jsonResponse = moneyServiceHttpClient.sendPostRequest(url, mapper.writeValueAsString(request)).body();
-            List<MemberMoney> memberMoneyList = mapper.readValue(jsonResponse, new TypeReference<>() {});
-            return memberMoneyList;
+            return mapper.readValue(jsonResponse, new TypeReference<>() {});
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
