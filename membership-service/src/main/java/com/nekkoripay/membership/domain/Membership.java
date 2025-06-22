@@ -14,25 +14,28 @@ public class Membership {
 	@Getter private final String address;
 	@Getter private final boolean isValid;
 	@Getter private final boolean isCorp;
+	@Getter private final String refreshToken;
 
 	// Membership
 	// 오염이 되면 안되는 클래스. 고객 정보. 핵심 도메인
 
-	public static Membership generateMember(
-		MembershipId membershipId,
-		MembershipName membershipName,
-		MembershipEmail membershipEmail,
-		MembershipAddress membershipAddress,
-		MembershipIsValid membershipIsValid,
-		MembershipIsCorp membershipIsCorp
-	) {
+	public static Membership generateMember (
+			MembershipId membershipId
+			, MembershipName membershipName
+			, MembershipEmail membershipEmail
+			, MembershipAddress membershipAddress
+			, MembershipIsValid membershipIsValid
+			, MembershipIsCorp membershipIsCorp
+			, MembershipRefreshToken membershipRefreshToken
+	){
 		return new Membership(
-			membershipId.membershipId,
-			membershipName.nameValue,
-			membershipEmail.emailValue,
-			membershipAddress.addressValue,
-			membershipIsValid.isValidValue,
-			membershipIsCorp.isCorpValue
+				membershipId.membershipId,
+				membershipName.nameValue,
+				membershipEmail.emailValue,
+				membershipAddress.addressValue,
+				membershipIsValid.isValidValue,
+				membershipIsCorp.isCorpValue,
+				membershipRefreshToken.refreshToken
 		);
 	}
 
@@ -41,8 +44,7 @@ public class Membership {
 		public MembershipId(String value) {
 			this.membershipId = value;
 		}
-
-		String membershipId;
+		String membershipId ;
 	}
 
 	@Value
@@ -50,16 +52,13 @@ public class Membership {
 		public MembershipName(String value) {
 			this.nameValue = value;
 		}
-
-		String nameValue;
+		String nameValue ;
 	}
-
 	@Value
 	public static class MembershipEmail {
 		public MembershipEmail(String value) {
 			this.emailValue = value;
 		}
-
 		String emailValue;
 	}
 
@@ -68,7 +67,6 @@ public class Membership {
 		public MembershipAddress(String value) {
 			this.addressValue = value;
 		}
-
 		String addressValue;
 	}
 
@@ -77,7 +75,6 @@ public class Membership {
 		public MembershipIsValid(boolean value) {
 			this.isValidValue = value;
 		}
-
 		boolean isValidValue;
 	}
 
@@ -86,7 +83,14 @@ public class Membership {
 		public MembershipIsCorp(boolean value) {
 			this.isCorpValue = value;
 		}
-
 		boolean isCorpValue;
+	}
+
+	@Value
+	public static class MembershipRefreshToken {
+		public MembershipRefreshToken(String value) {
+			this.refreshToken = value;
+		}
+		String refreshToken;
 	}
 }

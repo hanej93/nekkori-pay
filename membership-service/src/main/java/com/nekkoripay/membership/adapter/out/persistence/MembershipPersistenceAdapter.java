@@ -27,7 +27,8 @@ public class MembershipPersistenceAdapter implements RegisterMembershipPort, Fin
                         membershipEmail.getEmailValue(),
                         membershipAddress.getAddressValue(),
                         membershipIsValid.isValidValue(),
-                        membershipIsCorp.isCorpValue()
+                        membershipIsCorp.isCorpValue(),
+                        ""
                 )
         );
     }
@@ -38,15 +39,19 @@ public class MembershipPersistenceAdapter implements RegisterMembershipPort, Fin
     }
 
     @Override
-    public MembershipJpaEntity modifyMembership(Membership.MembershipId membershipId, Membership.MembershipName membershipName, Membership.MembershipEmail membershipEmail, Membership.MembershipAddress membershipAddress, Membership.MembershipIsValid membershipIsValid, Membership.MembershipIsCorp membershipIsCorp) {
+    public MembershipJpaEntity modifyMembership(Membership.MembershipId membershipId, Membership.MembershipName membershipName, Membership.MembershipEmail membershipEmail, Membership.MembershipAddress membershipAddress, Membership.MembershipIsValid membershipIsValid, Membership.MembershipIsCorp membershipIsCorp, Membership.MembershipRefreshToken membershipRefreshToken) {
         MembershipJpaEntity entity = membershipRepository.getReferenceById(Long.parseLong(membershipId.getMembershipId()));
         entity.setName(membershipName.getNameValue());
         entity.setAddress(membershipAddress.getAddressValue());
         entity.setEmail(membershipEmail.getEmailValue());
         entity.setCorp(membershipIsCorp.isCorpValue());
         entity.setValid(membershipIsValid.isValidValue());
+        entity.setRefreshToken(membershipRefreshToken.getRefreshToken());
 
-        return membershipRepository.save(entity);
+        // Todo 리턴 전에 새로운 객체로 평문화된 멤버 정보를 리턴해 줘야 해요.
+        MembershipJpaEntity clone = entity.clone();
+        clone.setEmail(membershipEmail.getEmailValue());
+        return clone;
     }
 
     @Override

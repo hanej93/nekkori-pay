@@ -13,5 +13,6 @@ public interface ModifyMembershipPort {
             , Membership.MembershipAddress membershipAddress
             , Membership.MembershipIsValid membershipIsValid
             , Membership.MembershipIsCorp membershipIsCorp
+            , Membership.MembershipRefreshToken membershipRefreshToken
     );
 }

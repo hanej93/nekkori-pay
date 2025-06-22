@@ -18,8 +18,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @AutoConfigureMockMvc
 class RegisterMembershipControllerTest {
 
-    @Autowired MockMvc mockMvc;
-    @Autowired ObjectMapper mapper;
+    @Autowired
+    MockMvc mockMvc;
+    @Autowired
+    ObjectMapper mapper;
 
     @Test
     public void testRegisterMembership() throws Exception {
@@ -30,7 +32,8 @@ class RegisterMembershipControllerTest {
                 new Membership.MembershipEmail("email"),
                 new Membership.MembershipAddress("address"),
                 new Membership.MembershipIsValid(true),
-                new Membership.MembershipIsCorp(false)
+                new Membership.MembershipIsCorp(false),
+                new Membership.MembershipRefreshToken("refreshToken")
         );
 
         mockMvc.perform(
