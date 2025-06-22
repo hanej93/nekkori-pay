@@ -1,0 +1,37 @@
+plugins {
+    id 'com.palantir.docker' version '0.36.0'
+}
+
+
+ext {
+    axonVersion = "4.11.0"
+}
+
+group = 'com.nekkoripay.money.query'
+version = '1.0.0'
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation "org.axonframework:axon-spring-boot-starter:$axonVersion"
+    implementation "org.axonframework:axon-configuration:$axonVersion"
+
+    implementation platform('software.amazon.awssdk:bom:2.31.64')
+    implementation 'software.amazon.awssdk:dynamodb'
+
+    implementation 'org.json:json:20200518'
+
+//	runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    implementation project(':common')
+}
+
+docker {
+    println(tasks.bootJar.outputs.files)
+    name rootProject.name + '-' + project.name + ":" + version
+    dockerfile file('../Dockerfile')
+    files tasks.bootJar.outputs.files
+    buildArgs(['JAR_FILE': tasks.bootJar.outputs.files.singleFile.name])
+}
