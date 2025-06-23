@@ -6,6 +6,7 @@ import com.nekkoripay.membership.domain.Membership;
 import java.util.List;
 
 public interface FindMembershipPort {
+
 	MembershipJpaEntity findMembership(
 		Membership.MembershipId membershipId
 	);

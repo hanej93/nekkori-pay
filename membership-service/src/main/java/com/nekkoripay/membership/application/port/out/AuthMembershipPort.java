@@ -4,6 +4,7 @@ package com.nekkoripay.membership.application.port.out;
 import com.nekkoripay.membership.domain.Membership;
 
 public interface AuthMembershipPort {
+
     // membership id 를 기준으로, jwt token 을 생성한다.
     String generateJwtToken(
             Membership.MembershipId membershipId

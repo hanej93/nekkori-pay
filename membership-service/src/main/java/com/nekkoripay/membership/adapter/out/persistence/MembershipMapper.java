@@ -6,6 +6,7 @@ import com.nekkoripay.membership.domain.Membership;
 
 @Component
 public class MembershipMapper {
+
     public Membership mapToDomainEntity(MembershipJpaEntity membershipJpaEntity) {
         return Membership.generateMember(
                 new Membership.MembershipId(membershipJpaEntity.getMembershipId() + ""),
