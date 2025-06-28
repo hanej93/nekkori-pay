@@ -302,6 +302,17 @@ services:
       - SPRING_BATCH_JDBC_INITIALIZE-SCHEMA=always
       - SPRING_BATCH_JDBC_SCHEMA=classpath:org/springframework/batch/core/schema-mysql.sql
 
+  vault:
+    image: vault:1.13.1
+    networks:
+      - nekkoripay_network
+    container_name: vault
+    ports:
+      - "8200:8200"
+    restart: always
+    cap_add:
+      - IPC_LOCK
+
 volumes:
   axonserver-data:
     driver: local

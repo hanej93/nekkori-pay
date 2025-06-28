@@ -18,6 +18,9 @@ dependencies {
 
 //	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'com.mysql:mysql-connector-j'
+
+	implementation 'org.springframework.vault:spring-vault-core:3.2.0'
+
 	implementation project(':common')
 }
 
